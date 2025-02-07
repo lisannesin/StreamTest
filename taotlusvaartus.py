@@ -113,7 +113,7 @@ def callVaartus(taotlusvaartus):
     st.write(f"### **Juhtotstarve {taotlusvaartus.get_number()}**")
 
     selected_maakasutus = create_selectbox(
-        label="**a)** " + "*Maaakasutuse juhtotstarve*",
+        label="**a)** " + "*Maakasutuse juhtotstarve*",
         options=land_use_options,
         placeholder="Valige juhtotstarve:",
         key=f"selectbox_juht{taotlusvaartus.get_number()}",
