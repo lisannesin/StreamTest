@@ -105,9 +105,11 @@ def addJuht(RohearvutusPohi, key_prefix):
         hide_index=True,
     )
 
-    # ✅ **Update the class instance with the modified values**
+    # ✅ **Force Streamlit to immediately recognize the changes**
     updated_values = edited_df_1["Sisestage Ühikuid DP (m²)"].tolist()
-    st.session_state[f"{key_prefix}_data"] = updated_values
+    if st.session_state[f"{key_prefix}_data"] != updated_values:
+        st.session_state[f"{key_prefix}_data"] = updated_values
+        st.rerun()  # Force a refresh to reflect changes in the second table
 
     RohearvutusPohi.set_pohi_ehitatud(updated_values[0])
     RohearvutusPohi.set_pohi_ehitatud(updated_values[1])
@@ -116,7 +118,6 @@ def addJuht(RohearvutusPohi, key_prefix):
     RohearvutusPohi.set_pohi_vaart(updated_values[4])
 
 
-    # 📌 SECOND TABLE (RESULTS)
     data_2 = {
         "Komponendid": [
             "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad.",
@@ -125,9 +126,9 @@ def addJuht(RohearvutusPohi, key_prefix):
             "Vett läbilaskvad pinnakatted ja ka sillutised.",
             "Väärtuslik kasvukohatüüp.",
         ],
-        "Ühikuid DP": updated_values,  # Updated values from first table
+        "Ühikuid DP": st.session_state[f"{key_prefix}_data"],  # ✅ Uses latest session state values
         "Koefitsient": [0, 1, 1, 0.4, 1.8],  # Fixed values
-        "RF - DP": [updated_values[i] * [0, 1, 1, 0.4, 1.8][i] for i in range(len(updated_values))],  # Dynamic Calculation
+        "RF - DP": [st.session_state[f"{key_prefix}_data"][i] * [0, 1, 1, 0.4, 1.8][i] for i in range(len(updated_values))],  # Dynamic Calculation
     }
 
 
@@ -141,16 +142,13 @@ def addJuht(RohearvutusPohi, key_prefix):
     st.write("")  # Adds a blank line
     st.write("")  # Adds another blank line
 
-
-
-
     
 
     st.subheader("📈 Uuendatud Arvutustabel")
     st.dataframe(df_2)
 
     # 📌 CALCULATE "Rohefaktor" (SUM OF ALL USER INPUTS)
-    rohefaktor = edited_df_1["Sisestage Ühikuid DP (m²)"].sum()
+    rohefaktor = edited_df_1["Sisestage Ühikuid DP (m²)"].sum() / RohearvutusPohi.get_osapindala()
 
 
      # 📌 SECOND TABLE (Results)
@@ -158,8 +156,7 @@ def addJuht(RohearvutusPohi, key_prefix):
     st.write("")  # Adds another blank line
     st.write("")  # Adds another blank line
     st.write("")  # Adds another blank line
-    st.write("")  # Adds another blank line
-    st.write("")  # Adds another blank line
+  
 
 
     # 📌 DISPLAY CENTERED SUMMARY SECTION

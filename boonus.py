@@ -104,5 +104,5 @@ def bonus():
     rohefaktor = int(edited_df_1["Sisestage Ühikuid DP (m²)"].sum())
 
     # 📌 DISPLAY CENTERED SUMMARY SECTION
-    st.markdown("<div class='summary-box'>Kavandatud maakasutuse ja planeeritud maakatte ökoloogilist kvaliteeti arvestav rohefaktor, mis ei võta arvesse haljastuse mitmekesisust</div>", unsafe_allow_html=True)
+    st.markdown("<div class='summary-box'>Kavandatud maakasutuse ja planeeritud maakatte ökoloogilist kvaliteeti arvestav rohefaktor</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='result-box'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
