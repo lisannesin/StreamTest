@@ -54,17 +54,18 @@ class TaotlusClass:
     def set_rf(self, value):
         self._rf = value
 
-    def calculate_rf(self, B5, B4, B10, B11, B8):
+    def calculate_rf(self, B5, B4, B10, B11, B8, B9):
         """
         Calculate RF taotlusväärtus based on the given formula.
         """
 
         # Convert inputs to float
-        B10 = float(B10)  # Planeeringualal säilitatavate hoonete alune pind (m²)
+        B10 = float(B10) / 100  # PROTSENT
         #B8 = str(B8)  # Convert to string for lookup
         B5 = float(B5)  # Planeeringualal kavandatud erinevate juhtotstarvete arv
         B4 = float(B4)  # Kogu detailplaneeringuala pindala (m²)
-        B11 = float(B11) / 100  # Convert percentage to decimal
+        B11 = float(B11)  # Convert percentage to decimal
+        B9 = float(B9)
 
         # Lookup dictionary for "Sisendid"
         sisendid_lookup = {
@@ -95,12 +96,20 @@ class TaotlusClass:
         lookup_value = sisendid_lookup.get(B8, 0)  # Default to 0 if not found
 
         # Determine the denominator
-        denominator = B4 if B5 == 1 else 200  # 200 used as default if multiple land uses
+        denominator = B4 if B5 == 1 else B9  # 200 used as default if multiple land uses
 
         # Apply calculation formula
         RF_taotlusvaartus = (B10 + lookup_value - (B11 / denominator) * lookup_value) if denominator != 0 else 0
 
+        #st.write(f"Number: {B5}, Pindala: {B4}, "
+        #        f"Lookup: {lookup_value}, denominator: {denominator}, "
+        #        f"Protsent: {B10}, Mingi asi B11: {B11}, RF: {B8})")
+
+        self.set_rf(RF_taotlusvaartus)
+
         return round(RF_taotlusvaartus, 2)  # Round for better readability
+    
+
 
 
     # ✅ Display information
@@ -108,4 +117,5 @@ class TaotlusClass:
         return (f"TaotlusClass(Number: {self._number}, Maakasutus: {self._maakasutus}, "
                 f"Pindala: {self._pindala}, Osapindala: {self._osapindala}, "
                 f"Protsent: {self._protsent}, Pind: {self._pind}, RF: {self._rf})")
+
 

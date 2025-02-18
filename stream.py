@@ -39,9 +39,8 @@ st.markdown("*Tallinna linna rohefaktori tööriist toetab  planeeritaval alal k
 # Tööpäevade arv
 
 
-st.logo(
-    'tallinn.png',
-)
+
+#st.sidebar.markdown("See siin on näide!")
 
 ##########################################################################################
 #st.subheader("**Detailplaneeringu rohefaktori taotlusväärtuse määramine.**")
@@ -56,9 +55,7 @@ option_arv = 0
 
 with col1:
     number = st.number_input("**Kogu detailplaneeringuala pindala (m2)**",
-    value = 0.0,
-    placeholder = "Valige juhtotstarvete arv...",
-    format="%0.1f",)
+    value = 0.0,)
 
 with col2:
     option_arv = st.selectbox(
@@ -72,7 +69,7 @@ with col2:
 # Initialize Streamlit columns
 col_juht1, col_juht2, col_juht3 = st.columns(3)
 
-arvutustabel1 = RohearvutusPohi(3, 3)
+
 
 # Juhtotstarve 1
 with col_juht1:
@@ -84,35 +81,40 @@ with col_juht1:
 
     taotlusvaartus.callVaartus(class1)
 
-    #st.write(klass) 
+    #st.write(class1) 
+    #st.write(class1.get_osapindala())
+
+    arvutustabel1 = RohearvutusPohi(class1.get_pindala(), class1.get_osapindala(), class1.get_rf())
 
 
 # Conditional logic for Juhtotstarve 2
 if option_arv in [2, 3]:
     with col_juht2:
 
-        arvutustabel2 = RohearvutusPohi(3, 3)
+        #arvutustabel2 = RohearvutusPohi(3, 3)
 
         class2 = TaotlusClass(number=2, pindala=number)
 
         taotlusvaartus.callVaartus(class2)
 
+        arvutustabel2 = RohearvutusPohi(class2.get_pindala(), class2.get_osapindala(), class2.get_rf())
+
 if option_arv in [3]:
 
     with col_juht3:
 
-        arvutustabel3 = RohearvutusPohi(3, 3)
+        #arvutustabel3 = RohearvutusPohi(3, 3)
 
         class3 = TaotlusClass(number=3, pindala=number)
 
         taotlusvaartus.callVaartus(class3)
 
+        arvutustabel3 = RohearvutusPohi(class3.get_pindala(), class3.get_osapindala(), class3.get_rf())
+
 #####################################################################################################
 st.divider()
 st.subheader("**2. Samm: Rohefaktori arvutus**")
 st.divider()
-
-
 
 
 if "selected_sv" not in st.session_state:

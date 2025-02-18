@@ -2,9 +2,10 @@ import streamlit as st
 
 # MyClass gets redefined every time app.py reruns
 class RohearvutusPohi:
-    def __init__(self, taotlusvaartus, osapindala):
+    def __init__(self, taotlusvaartus, osapindala, rf):
         self._taotlusvaartus = taotlusvaartus
         self._osapindala = osapindala
+        self._rf = rf
         self._pohi_ehitatud = 0
         self._pohi_maapinnaga = 0
         self._pohi_haljas = 0
@@ -32,6 +33,9 @@ class RohearvutusPohi:
 
     def get_pohi_vaart(self):
         return self._pohi_vaart
+    
+    def get_rf(self):
+        return self._rf
 
     # Setters
     def set_taotlusvaartus(self, value):

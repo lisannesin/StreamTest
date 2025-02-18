@@ -59,7 +59,7 @@ def create_slider(label, min_value, max_value, default_value, key):
     """
     return st.slider(label, min_value, max_value, default_value, key=key)
 
-def create_number_input(label, key):
+def create_number_input(label, key, value=0):
     """
     Creates a unique number input for Streamlit.
 
@@ -70,7 +70,7 @@ def create_number_input(label, key):
     Returns:
         float: The user-entered number from the input.
     """
-    return st.number_input(label, key=key)
+    return st.number_input(label, key=key, value=value)
 
 
 def callVaartus(taotlusvaartus):  
@@ -122,12 +122,14 @@ def callVaartus(taotlusvaartus):
     taotlusvaartus.set_maakasutus(selected_maakasutus)
     
 
-    #osapindala = create_number_input(
-    #    label="**b)** " + "*Eraldi määratud juhtotstarbega ala osapindala  (m2)*",
-    #    key=f"pindala{taotlusvaartus.get_number()}",
-    #)
+    osapindala = create_number_input(
+        label="**b)** " + "*Eraldi määratud juhtotstarbega ala osapindala  (m2)*",
+        key=f"pindala{taotlusvaartus.get_number()}",
+        value=200,
+    )
 
-    #taotlusvaartus.set_osapindala(osapindala)
+
+    taotlusvaartus.set_osapindala(osapindala)
 
     protsent  = create_slider(
         label="**c)** " + "*Detailplaneeringu algatamise otsusega määratud haljastuse protsent (0-100)*",
@@ -154,7 +156,8 @@ def callVaartus(taotlusvaartus):
 					    taotlusvaartus.get_pindala(),
  					    taotlusvaartus.get_protsent(), 
 					    taotlusvaartus.get_pind(), 
-					    taotlusvaartus.get_maakasutus())
+					    taotlusvaartus.get_maakasutus(),
+                        taotlusvaartus.get_osapindala())
 
     
 

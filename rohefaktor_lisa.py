@@ -49,6 +49,19 @@ def addJuht(RohearvutusPohi, key_prefix):
                 margin: 10px auto; /* Centers the div */
             }
 
+            /* Center the red result box */
+            .result-box-red {
+                background-color: #bf5461;
+                width: 40%;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+                color: black;
+                font-weight: bold;
+                font-size: 22px;
+                margin: 10px auto; /* Centers the div */
+            }
+
         </style>
         """,
         unsafe_allow_html=True,
@@ -173,8 +186,9 @@ def addJuht(RohearvutusPohi, key_prefix):
     st.subheader("📈 Uuendatud Arvutustabel")
     st.dataframe(df_2)
 
+
     # 📌 CALCULATE "Rohefaktor" (SUM OF ALL USER INPUTS)
-    rohefaktor = edited_df_1["Sisestage Ühikuid DP (m²)"].sum() / RohearvutusPohi.get_osapindala()
+    rohefaktor = edited_df_1["Sisestage Ühikuid DP (m²)"].sum() / int(RohearvutusPohi.get_osapindala())
 
 
      # 📌 SECOND TABLE (Results)
@@ -187,7 +201,10 @@ def addJuht(RohearvutusPohi, key_prefix):
 
     # 📌 DISPLAY CENTERED SUMMARY SECTION
     st.markdown("<div class='summary-box'>Planeeringulahendusega kavandatud maakattetüüpide rohefaktor</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='result-box'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
+    if (rohefaktor >= RohearvutusPohi.get_rf()):
+        st.markdown(f"<div class='result-box'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<div class='result-box-red'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
 
 
     # 📌 ADD A VERTICAL DIVIDER BETWEEN COLUMNS
