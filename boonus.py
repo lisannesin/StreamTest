@@ -66,7 +66,7 @@ def bonus():
     df_1 = pd.DataFrame(data_1)
 
     edited_df_1 = st.data_editor(
-        df_1,
+        df_1.drop(columns=["Selgitus"]),
         column_config={
             "Komponendid": st.column_config.Column("Komponendid", disabled=True, width="large"),
             "Sisestage Ühikuid DP (m²)": st.column_config.Column("Sisestage Ühikuid DP (m²)", required=True, width="medium"),
@@ -74,6 +74,18 @@ def bonus():
         },
         hide_index=True,
     )
+
+    with st.popover(f"ℹ️"):
+        st.markdown(f"**{df_1['Komponendid'][0]}**")
+        st.write(df_1["Selgitus"][0])
+        st.markdown(f"**{df_1['Komponendid'][1]}**")
+        st.write(df_1["Selgitus"][1])
+        st.markdown(f"**{df_1['Komponendid'][2]}**")
+        st.write(df_1["Selgitus"][2])
+        st.markdown(f"**{df_1['Komponendid'][3]}**")
+        st.write(df_1["Selgitus"][3])
+        st.markdown(f"**{df_1['Komponendid'][4]}**")
+        st.write(df_1["Selgitus"][4])
 
     st.subheader("📈 Uuendatud Arvutustabel")
     

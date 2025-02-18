@@ -70,11 +70,11 @@ def addJuht(RohearvutusPohi, key_prefix):
     
     data_1 = {
         "Komponendid": [
-            "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad (sh. hooned, rajatised, teed, parklad jms).",
-            "Maapinnaga ühendatud taimkattega ala: igasugune püsivalt maapinnaga ühendatud haljasala (muru, rohumaa, park, aiandusmaa, taimede istutusalad jms)",
-            "Haljastatud/looduslike kallastega vee-elupaigad (sh. tiigid, kraavid) ja looduslikud veekogud.",
+            "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad.",
+            "Maapinnaga ühendatud taimkattega ala.",
+            "Haljastatud/looduslike kallastega vee-elupaigad ja looduslikud veekogud.",
             "Vett läbilaskvad pinnakatted ja ka sillutised.",
-            "Väärtuslik kasvukohatüüp: Tallinna haljastuse inventeerimise korra järgi määratud kasvukohatüübid (I-IV).",
+            "Väärtuslik kasvukohatüüp.",
         ],
         "Sisestage Ühikuid DP (m²)": st.session_state[f"{key_prefix}_data"],  # Editable column
         "Selgitus": [
@@ -94,16 +94,42 @@ def addJuht(RohearvutusPohi, key_prefix):
 
     st.subheader("🔹 Sisesta väärtused juhtotstarve")
 
+    #col_table, col_info = st.columns([3, 1])
+
+        # Display editable table with inline info buttons
+    
     edited_df_1 = st.data_editor(
-        df_1,
-        key=f"{key_prefix}_table",
+        df_1.drop(columns=["Selgitus"]),  # Hide Selgitus column from main table
+        key="table_with_info",
         column_config={
             "Komponendid": st.column_config.Column("Komponendid", disabled=True, width="large"),
-            "Sisestage Ühikuid DP (m²)": st.column_config.Column("Sisestage Ühikuid DP (m²)", required=True, width="medium", help="Täita tuleb ainult see veerg."),
-            "Selgitus": st.column_config.Column("Selgitus", disabled=True, width="large"),
+            "Sisestage Ühikuid DP (m²)": st.column_config.Column(
+                "Sisestage Ühikuid DP (m²)", 
+                required=True, 
+                width="medium", 
+                help="Täita tuleb ainult see veerg."
+            ),
+            "Info": st.column_config.Column("ℹ️ Info", disabled=True, width="small"),
         },
         hide_index=True,
     )
+
+    # Create columns and popovers with compact buttons
+    col1= st.columns(1)
+
+    #with col1:
+    with st.popover(f"ℹ️"):
+        st.markdown(f"**{df_1['Komponendid'][0]}**")
+        st.write(df_1["Selgitus"][0])
+        st.markdown(f"**{df_1['Komponendid'][1]}**")
+        st.write(df_1["Selgitus"][1])
+        st.markdown(f"**{df_1['Komponendid'][2]}**")
+        st.write(df_1["Selgitus"][2])
+        st.markdown(f"**{df_1['Komponendid'][3]}**")
+        st.write(df_1["Selgitus"][3])
+        st.markdown(f"**{df_1['Komponendid'][4]}**")
+        st.write(df_1["Selgitus"][4])
+    
 
     # ✅ **Force Streamlit to immediately recognize the changes**
     updated_values = edited_df_1["Sisestage Ühikuid DP (m²)"].tolist()
