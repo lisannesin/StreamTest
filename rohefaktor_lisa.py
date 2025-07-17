@@ -6,7 +6,6 @@ import Classes.pohiClass as RohearvutusPohi
 
 
 
-
 def addJuht(RohearvutusPohi, key_prefix):
 
     # 📌 APPLY CUSTOM CSS TO STYLE COLUMNS AND ADD A DIVIDER
@@ -80,102 +79,56 @@ def addJuht(RohearvutusPohi, key_prefix):
 
     if f"{key_prefix}_data" not in st.session_state:
         st.session_state[f"{key_prefix}_data"] = yhikud
-    
-    data_1 = {
-        "Komponendid": [
-            "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad.",
-            "Maapinnaga ühendatud taimkattega ala.",
-            "Haljastatud/looduslike kallastega vee-elupaigad ja looduslikud veekogud.",
-            "Vett läbilaskvad pinnakatted ja ka sillutised.",
-            "Väärtuslik kasvukohatüüp.",
-        ],
-        "Sisestage Ühikuid DP (m²)": st.session_state[f"{key_prefix}_data"],  # Editable column
-        "Selgitus": [
-        "Alad, mis ei panusta rohefaktorisse. Hoonete puhul võetakse detailplaneeringu rohefaktoris arvesse ehitusalune pind. Ehitusloa staadiumis on võimalik võtta arvesse konsoolsete osade alla jääv maapinnaga ühendatud haljastus. Boonusfaktorina võib olla võimalik kaaluda haljaskatuste/fassaadide rajamist (vt allpool).",
-        "Maakatte põhifaktorina ei eristata muru/ilupeenardee/lilleniidu vms rajatud koosluste ökoloogilist kvaliteeti. Erinev rohefaktor saavutatakse samale alale täiendavate boonusfaktorite arvesse võtmise teel (vt allpool). See tähendab, et muru puhul jääb koefitsient ikka 1-ks , aga lilleniidu puhul arvutatakse boonusfaktori real sama pindala veelkord läbi faktoriga 0,4, mis summeerides annab kokku 1,4. ",
-        "Elurikkust ja jätkusuutlikku sademeveekäitlust soosivad vee-elupaigad. Siin ei võeta arvesse tehislikke basseine/purskkaevusid, need arvestada kõvakattega alade hulka.",
-        "Siin võetakse arvesse kõik maakattetüübid, kus <80 protsendi laotisest vett mitteläbilaskev. Arvutus ei erista sillutisi nende läbilaskevõime järgi. Ehitusloa staadiumis täpsustatakse komponenti, kusjuures võib sõltuvalt materjalivalikust koefitsient olla nii kõrgem kui madalam (0,3-0,5) ",
-        "Võrdsustatakse nimetatud korra §11 lg (4) säilitamiskohustusega I-II klassi kasvukohatüübid ja III-IV väärtusklassi kasvukohatüübid. NB! Väärtusliku kasvukohatüübi esinemisalale ei rakendata boonusfaktoreid, ehk nende ulatuses ei ole lubatud vee-elupaikade rajamine, uute puude istutamine vms. Uute rohetaristu komponentide rajamine väärtuslikes elupaikades rikuks elupaiga tunnused.",
-    ],
-    }
-
-    df_1 = pd.DataFrame(data_1)
 
     # 📌 DISPLAY FIRST TABLE (Editable)
     #col_ro, col2 = st.columns([1, 1])  # Two equal columns
     #st.title("📊 Rohefaktori Kalkulaator")
 
-    st.subheader("🔹 Sisesta väärtused juhtotstarve")
+    st.subheader("Sisesta väärtused juhtotstarve")
+    st.write("Sisestage Ühikuid DP (m²)")
 
     #col_table, col_info = st.columns([3, 1])
 
         # Display editable table with inline info buttons
-    
-    edited_df_1 = st.data_editor(
-        df_1.drop(columns=["Selgitus"]),  # Hide Selgitus column from main table
-        key="table_with_info",
-        column_config={
-            "Komponendid": st.column_config.Column("Komponendid", disabled=True, width="large"),
-            "Sisestage Ühikuid DP (m²)": st.column_config.Column(
-                "Sisestage Ühikuid DP (m²)", 
-                required=True, 
-                width="medium", 
-                help="Täita tuleb ainult see veerg."
-            ),
-            "Info": st.column_config.Column("ℹ️ Info", disabled=True, width="small"),
-        },
-        hide_index=True,
-    )
 
-    # Create columns and popovers with compact buttons
-    col1= st.columns(1)
+    numberfcol1 = st.number_input("**Täisehitatud, kõvakattega, vett mitteläbilaskvad alad.**", value=0, placeholder = "Sisestage Ühikuid DP (m²)", help="Täisehitatud, kõvakattega, vett mitteläbilaskvad alad. Alad, mis ei panusta rohefaktorisse. Hoonete puhul võetakse detailplaneeringu rohefaktoris arvesse ehitusalune pind. Ehitusloa staadiumis on võimalik võtta arvesse konsoolsete osade alla jääv maapinnaga ühendatud haljastus. Boonusfaktorina võib olla võimalik kaaluda haljaskatuste/fassaadide rajamist (vt allpool).")
+    numberfcol2 = st.number_input("**Maapinnaga ühendatud taimkattega ala.**", value=0, placeholder = "Sisestage Ühikuid DP (m²)", help="Maakatte põhifaktorina ei eristata muru/ilupeenardee/lilleniidu vms rajatud koosluste ökoloogilist kvaliteeti. Erinev rohefaktor saavutatakse samale alale täiendavate boonusfaktorite arvesse võtmise teel (vt allpool). See tähendab, et muru puhul jääb koefitsient ikka 1-ks , aga lilleniidu puhul arvutatakse boonusfaktori real sama pindala veelkord läbi faktoriga 0,4, mis summeerides annab kokku 1,4.")
+    numberfcol3 = st.number_input("**Looduslikud veekogud.**", value=0, placeholder = "Sisestage Ühikuid DP (m²)", help="Elurikkust ja jätkusuutlikku sademeveekäitlust soosivad vee-elupaigad. Siin ei võeta arvesse tehislikke basseine/purskkaevusid, need arvestada kõvakattega alade hulka.")
+    numberfcol4 = st.number_input("**Vett läbilaskvad pinnakatted ja ka sillutised.**", value=0, placeholder = "Sisestage Ühikuid DP (m²)", help="Siin võetakse arvesse kõik maakattetüübid, kus <80 protsendi laotisest vett mitteläbilaskev. Arvutus ei erista sillutisi nende läbilaskevõime järgi. Ehitusloa staadiumis täpsustatakse komponenti, kusjuures võib sõltuvalt materjalivalikust koefitsient olla nii kõrgem kui madalam (0,3-0,5)")
+    numberfcol5 = st.number_input("**Väärtuslik kasvukohatüüp.**", value=0, placeholder = "Sisestage Ühikuid DP (m²)", help= "Võrdsustatakse nimetatud korra §11 lg (4) säilitamiskohustusega I-II klassi kasvukohatüübid ja III-IV väärtusklassi kasvukohatüübid. NB! Väärtusliku kasvukohatüübi esinemisalale ei rakendata boonusfaktoreid, ehk nende ulatuses ei ole lubatud vee-elupaikade rajamine, uute puude istutamine vms. Uute rohetaristu komponentide rajamine väärtuslikes elupaikades rikuks elupaiga tunnused.")
 
-    #with col1:
-    with st.popover(f"ℹ️"):
-        st.markdown(f"**{df_1['Komponendid'][0]}**")
-        st.write(df_1["Selgitus"][0])
-        st.markdown(f"**{df_1['Komponendid'][1]}**")
-        st.write(df_1["Selgitus"][1])
-        st.markdown(f"**{df_1['Komponendid'][2]}**")
-        st.write(df_1["Selgitus"][2])
-        st.markdown(f"**{df_1['Komponendid'][3]}**")
-        st.write(df_1["Selgitus"][3])
-        st.markdown(f"**{df_1['Komponendid'][4]}**")
-        st.write(df_1["Selgitus"][4])
-    
+    RohearvutusPohi.set_pohi_ehitatud(numberfcol1)
+    RohearvutusPohi.set_pohi_ehitatud(numberfcol2)
+    RohearvutusPohi.set_pohi_haljas(numberfcol3)
+    RohearvutusPohi.set_pohi_vett(numberfcol4)
+    RohearvutusPohi.set_pohi_vaart(numberfcol5)
 
-    # ✅ **Force Streamlit to immediately recognize the changes**
-    updated_values = edited_df_1["Sisestage Ühikuid DP (m²)"].tolist()
-    if st.session_state[f"{key_prefix}_data"] != updated_values:
-        st.session_state[f"{key_prefix}_data"] = updated_values
-        st.rerun()  # Force a refresh to reflect changes in the second table
-
-    RohearvutusPohi.set_pohi_ehitatud(updated_values[0])
-    RohearvutusPohi.set_pohi_ehitatud(updated_values[1])
-    RohearvutusPohi.set_pohi_haljas(updated_values[2])
-    RohearvutusPohi.set_pohi_vett(updated_values[3])
-    RohearvutusPohi.set_pohi_vaart(updated_values[4])
+    entered_values = [numberfcol1, numberfcol2, numberfcol3, numberfcol4, numberfcol5]
+    koefitsient = [0, 1, 1, 0.4, 1.8]
+    rf_dp = [round(entered_values[i] * koefitsient[i], 2) for i in range(5)]
 
 
+        # Create table
     data_2 = {
         "Komponendid": [
             "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad.",
             "Maapinnaga ühendatud taimkattega ala.",
-            "Haljastatud/looduslike kallastega vee-elupaigad ja looduslikud veekogud.",
+            "Looduslikud veekogud.",
             "Vett läbilaskvad pinnakatted ja ka sillutised.",
             "Väärtuslik kasvukohatüüp.",
         ],
-        "Ühikuid DP": st.session_state[f"{key_prefix}_data"],  # ✅ Uses latest session state values
-        "Koefitsient": [0, 1, 1, 0.4, 1.8],  # Fixed values
-        "RF - DP": [st.session_state[f"{key_prefix}_data"][i] * [0, 1, 1, 0.4, 1.8][i] for i in range(len(updated_values))],  # Dynamic Calculation
+        "Ühikuid DP": entered_values,
+        "Koefitsient": koefitsient,
+        "RF - DP": rf_dp,
     }
-
 
     df_2 = pd.DataFrame(data_2)
 
-    # Format numbers to 2 decimal places
-    df_2["Koefitsient"] = df_2["Koefitsient"].round(2)
-    df_2["RF - DP"] = df_2["RF - DP"].round(2)
+    st.subheader("Lõplik Arvutustabel")
+
+    # Display table
+    st.dataframe(df_2)
+    #st.dataframe(df_2.style.format(subset=["Ühikuid DP", "Koefitsient", "RF - DP"], formatter="{:.1f}"))
 
      # 📌 SECOND TABLE (Results)
     st.write("")  # Adds a blank line
@@ -183,19 +136,18 @@ def addJuht(RohearvutusPohi, key_prefix):
 
     
 
-    st.subheader("📈 Uuendatud Arvutustabel")
-    st.dataframe(df_2)
+    #st.subheader("📈 Uuendatud Arvutustabel")
+    #st.dataframe(df_2)
 
 
     # 📌 CALCULATE "Rohefaktor" (SUM OF ALL USER INPUTS)
-    rohefaktor = edited_df_1["Sisestage Ühikuid DP (m²)"].sum() / int(RohearvutusPohi.get_osapindala())
+    rohefaktor = (numberfcol1+numberfcol2+numberfcol3+numberfcol4+numberfcol5) / int(RohearvutusPohi.get_osapindala())
 
 
      # 📌 SECOND TABLE (Results)
-    st.write("")  # Adds a blank line
-    st.write("")  # Adds another blank line
-    st.write("")  # Adds another blank line
-    st.write("")  # Adds another blank line
+    #st.write("")  # Adds a blank line
+    ##st.write("")  # Adds another blank line
+    #st.write("")  # Adds another blank line
   
 
 
@@ -205,6 +157,8 @@ def addJuht(RohearvutusPohi, key_prefix):
         st.markdown(f"<div class='result-box'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='result-box-red'>{rohefaktor:.2f}</div>", unsafe_allow_html=True)
+
+    return rohefaktor
 
 
     # 📌 ADD A VERTICAL DIVIDER BETWEEN COLUMNS

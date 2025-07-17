@@ -110,7 +110,7 @@ def callVaartus(taotlusvaartus):
         unsafe_allow_html=True,
     )
 
-    st.write(f"### **Juhtotstarve {taotlusvaartus.get_number()}**")
+    
 
     selected_maakasutus = create_selectbox(
         label="**a)** " + "*Maakasutuse juhtotstarve*",
