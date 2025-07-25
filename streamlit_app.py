@@ -8,7 +8,9 @@ import taotlusvaartus
 from Classes.taotlusClass import TaotlusClass 
 from Classes.pohiClass import RohearvutusPohi
 import boonus
+import boonus_haljastus
 import io
+from Classes.excelClass import ExcelClass
 
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
@@ -41,62 +43,62 @@ def set_bg_image(image_file):
     '''
     st.markdown(bg_image, unsafe_allow_html=True)
 
-# Call the function with your image file
-#set_bg_image('beauty.jpg')
-
-
-st.title("Detailplaneeringu rohefaktori taotlusväärtuse määramine")
-st.markdown("*Tallinna linna rohefaktori tööriist toetab  planeeritaval alal kõrgekvaliteedilise rohetaristu kavandamist. Kavandatava lahenduse ökoloogilise kvaliteedi hindamiseks on koostatud arvutustabel, mis aitab kaasa nõuetekohase arvutuse läbiviimisele. Alljärgnevalt on kirjeldatud, kuidas rohefaktori analüüs läbi viiakse. Esimese asjana on vajalik seadistada, kas arvutus tehakse detailplaneeringu või ehitusprojekti tasandil.*")
-
-# Tööpäevade arv
-
-
-
-#st.sidebar.markdown("See siin on näide!")
-
-##########################################################################################
-#st.subheader("**Detailplaneeringu rohefaktori taotlusväärtuse määramine.**")
-st.divider()
-st.subheader("**1. Samm: Taotlusväärtuse määramine**")
-st.divider()
-
+#st.subheader("**Taotlusväärtuse määramine**")
+#st.divider()
 
 col1, col2 = st.columns(2)
 number = 0
 option_arv = 0
 
-    
+st.subheader("**SAMM 1 - Rohefaktori taotlusväärtuse määramine**", help = "")
+st.divider()
+st.subheader("**Planeeringuala andmed**")
 
-# Initialize Streamlit columns
-#col_juht1, col_juht2, col_juht3 = st.columns(3)
-st.write(f"### **Juhtotstarve**")
 
-number = st.number_input("**Kogu detailplaneeringuala pindala (m2)**", value = 0.0,)
+number = st.number_input("**Detailplaneeringuala pindala. (m²)**", value = 0.0,)
 
 class1 = TaotlusClass(number=1, pindala=number)
 
+count = taotlusvaartus.callVaartus(class1)
 
-taotlusvaartus.callVaartus(class1)
-
-#st.write(class1) 
-#st.write(class1.get_osapindala())
-
-
+#st.write(count)
 
 arvutustabel1 = RohearvutusPohi(class1.get_pindala(), class1.get_osapindala(), class1.get_rf())
 
 
-
 #####################################################################################################
-st.divider()
-st.subheader("**2. Samm: Rohefaktori arvutus**")
 
-rf = 0
+excel = ExcelClass(number)
+
+rf, excel = rohefaktor_lisa.addJuht(arvutustabel1, "SV1", excel)
+
+st.divider()
+#st.subheader("**Rohefaktori arvutus**")
+
+colBon1, colBon2 = st.columns(2)
+
+agree = st.checkbox("Boonusfaktorite arvutus")
+
+boonusRes= 0
+finalRes = 0
+if agree:
+    boonusRes, excel = boonus.bonus(rf, class1.get_pindala(), excel, count)
+
+    agree2 = st.checkbox("Haljastuse rohefaktori arvutus")
+
+    if agree2:
+        finalRes, excel = boonus_haljastus.bonus(boonusRes, class1.get_pindala(), excel, count)
+
+
+st.divider()
+st.subheader("**Tõmba alla tulemustega Excel**", help = "")
 buffer = io.BytesIO()
 user_input = 'NULL'
 datatest = 'NULL'
 
 col1, col2 = st.columns(2)
+
+
 
 with col1:
     st.write('Sisesta DP kood:')
@@ -108,18 +110,52 @@ with col2:
     if user_input.upper().startswith("DP") and len(user_input) == 8:
         datatest = user_input
 
-        count = class1.calculate_rf(class1.get_number(),
-					    class1.get_pindala(),
- 					    class1.get_protsent(), 
-					    class1.get_pind(), 
-					    class1.get_maakasutus(),
-                        class1.get_osapindala())
+        # Call your RF calculation method (if needed)
+        rf_value = class1.calculate_rf(
+            class1.get_number(),
+            class1.get_pindala(),
+            class1.get_protsent(),
+            class1.get_pind(),
+            class1.get_maakasutus(),
+            class1.get_osapindala()
+        )
 
-        # ✅ Create the Excel content BEFORE rendering the button
-        df1 = pd.DataFrame({"DP kood": [user_input], "RF": [count]})
+        # Build DataFrame from the excel instance
+        data = {
+            "DP kood": user_input,
+            "RF taotlusväärtus": rf_value,
+            "Planeeringulahendusega kavandatud maakattetüüpide rohefaktor": round(rf, 2),
+            "Kavandatud maakasutuse ja planeeritud maakatte ökoloogilist kvaliteeti arvestav rohefaktor": round(boonusRes, 2),
+            "Planeeringulahenduse rohefaktor": round(finalRes, 2),
+            "": "",
+            "": "",
+            "Detailplaneeringuala pindala (m²)": class1.get_pindala(),
+            "Maakasutuse tüüp": class1.get_maakasutus(),
+            "Detailplaneeringu algatamise otsusega määratud haljastuse protsent (0-100)": class1.get_protsent(),
+            "Planeeringualal säilitatavate hoonete alune pind. (m²)": class1.get_pind(),
+            "Täisehitatud, kõvakattega, vett mitteläbilaskvad alad. (m²)": excel.get_pohi_taisehitatud(),
+            "Maapinnaga ühendatud taimkattega ala. (m²)": excel.get_pohi_yhendatud(),
+            "Looduslikud veekogud. (m²)": excel.get_pohi_looduslikud_veekogud(),
+            "Vett läbilaskvad pinnakatted ja ka sillutised. (m²)": excel.get_pohi_vett_labilaskvad(),
+            "Väärtuslik kasvukohatüüp. (m²)": excel.get_pohi_vaart(),
+            "Haljasfassaadid ja -piirded (keskmine kõrgus) (m)": excel.get_bon_haljas_korg(),
+            "Haljasfassaadid ja -piirded (laius) (m)": excel.get_bon_haljas_lai(),
+            "Taimkattega ala ehitiste peal. (m²)": excel.get_bon_taimkattega_ala(),
+            "Haljasaladele rajatud sademevee kohtkäitlus: so maapinnalohud (m²)": excel.get_bon_sademevee_koht(),
+            "Tehispindadele rajatud sademevee kohtkäitlus. (m²)": excel.get_bon_sademevee_koht_tehis(),
+            "Tehislike jäätmaade/pruunalade asendamine rohealaga. (m²)": excel.get_bon_jäätmete(),
+            "Terviklike suurte haljasalade rajamine või alade kujundamine. (m²)": excel.get_bon_kujudamine(),
+            "Väiksekasvulise/sammasja puu istutamine. (tk)": excel.get_bonH_vaike_puu(),
+            "Keskmisekasvulise puu istutamine. (tk)": excel.get_bonH_kesk_puu(),
+            "Suurekasvulise puu istutamine. (tk)": excel.get_bonH_suur_puu(),
+            "Püsikute massistutus või põõsastike istutusala. (m²)": excel.get_bonH_massiist(),
+            "Kohalike looduslike liikide kasvukohtade loomine. (m²)": excel.get_bonH_kasvukohad()
+        }
+        df1 = pd.DataFrame(list(data.items()), columns=["Väli", "Väärtus"])
 
+        # Write to Excel in memory
         with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-            df1.to_excel(writer, sheet_name='Sheet1', index=False)
+            df1.to_excel(writer, sheet_name='Rohefaktor', index=False)
 
         buffer.seek(0)
 
@@ -129,32 +165,7 @@ with col2:
             file_name="rohefaktor_raport.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
     else:
-        #st.write('Tõmba alla tulemuste Excel:')
         st.write("❌ Eelnevalt täida õige DP kood")
-
-
-
-st.divider()
-
-
-agree = st.checkbox("Boonusfaktorite arvutus")
-
-rf = rohefaktor_lisa.addJuht(arvutustabel1, "SV1")
-
-if agree:
-    boonus.bonus()
-
-
-
-
-
-
-
-
-
-
-
-
-
 

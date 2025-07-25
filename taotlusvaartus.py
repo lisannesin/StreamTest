@@ -113,7 +113,7 @@ def callVaartus(taotlusvaartus):
     
 
     selected_maakasutus = create_selectbox(
-        label="**a)** " + "*Maakasutuse juhtotstarve*",
+        label="**Maakasutuse tüüp.**",
         options=land_use_options,
         placeholder="Valige juhtotstarve:",
         key=f"selectbox_juht{taotlusvaartus.get_number()}",
@@ -122,17 +122,17 @@ def callVaartus(taotlusvaartus):
     taotlusvaartus.set_maakasutus(selected_maakasutus)
     
 
-    osapindala = create_number_input(
-        label="**b)** " + "*Eraldi määratud juhtotstarbega ala osapindala  (m2)*",
-        key=f"pindala{taotlusvaartus.get_number()}",
-        value=200,
-    )
+    #osapindala = create_number_input(
+    #    label="**b)** " + "*Eraldi määratud juhtotstarbega ala osapindala  (m2)*",
+    #    key=f"pindala{taotlusvaartus.get_number()}",
+    #    value=200,
+   # )
 
 
-    taotlusvaartus.set_osapindala(osapindala)
+   # taotlusvaartus.set_osapindala(osapindala)
 
     protsent  = create_slider(
-        label="**c)** " + "*Detailplaneeringu algatamise otsusega määratud haljastuse protsent (0-100)*",
+        label="**Detailplaneeringu algatamise otsusega määratud haljastuse protsent. (0-100)**",
         min_value=0,
         max_value=100,
         default_value=0,
@@ -143,7 +143,7 @@ def callVaartus(taotlusvaartus):
 
 
     pind = create_number_input(
-        label="**d)** " + "*Planeeringualal säilitatavate hoonete alune pind (m2)*",
+        label="**Planeeringualal säilitatavate hoonete alune pind. (m²)**",
         key=f"inopit{taotlusvaartus.get_number()}",
     )
 
@@ -161,9 +161,8 @@ def callVaartus(taotlusvaartus):
 
     
 
-    st.markdown(f'''
-    <h4 style="color: green;">RF taotlusväärtus planeeringuala osale on <b>{count}</b></h4>
-''', unsafe_allow_html=True)
+    st.markdown(f'''<h4 style="color: green;">ROHEFAKTORI TAOTLUSVÄÄTUS <b>{count}</b></h4>''', unsafe_allow_html=True)
 
+    return count
     #st.markdown("<div class='summary-box'>Planeeringulahendusega kavandatud maakattetüüpide rohefaktor</div>", unsafe_allow_html=True)
     #st.markdown(f"<div class='result-box'>{count}</div>", unsafe_allow_html=True)
