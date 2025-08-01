@@ -53,7 +53,7 @@ option_arv = 0
 st.subheader("**Detailplaneeringu rohefaktori taotlusväärtuse leidmine**", help = "")
 
 #st.subheader("**Planeeringuala andmed**")
-#st.divider()
+st.divider()
 
 number = st.number_input("**Detailplaneeringuala pindala. (m²)**", value = 0.0,)
 
