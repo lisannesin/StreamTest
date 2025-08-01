@@ -52,8 +52,8 @@ option_arv = 0
 
 st.subheader("**Detailplaneeringu rohefaktori taotlusväärtuse leidmine**", help = "")
 
-st.subheader("**Planeeringuala andmed**")
-st.divider()
+#st.subheader("**Planeeringuala andmed**")
+#st.divider()
 
 number = st.number_input("**Detailplaneeringuala pindala. (m²)**", value = 0.0,)
 
@@ -74,7 +74,7 @@ arvutustabel1 = RohearvutusPohi(class1.get_pindala(), class1.get_osapindala(), c
 st.divider()
 excel = ExcelClass(number)
 
-st.subheader("Maakattetüüpide ja rohekomponentide arvesse võtmine")
+st.subheader("Detailplaneeringu rohefaktori arvutusväärtuse leidmine")
 
 st.divider()
 
