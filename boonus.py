@@ -41,8 +41,8 @@ def bonus(rf, pindala, excel, count):
     )
 
 
-    st.subheader("Boonusfaktorid: maakate, hooned (arvutuspind kattub põhifaktori arvutuspinnaga)")
-    st.divider()
+    #st.subheader("Boonusfaktorid: rohetaristu")
+    #st.divider()
 
     numcol1, numcol2 = st.columns(2)
 
@@ -53,28 +53,66 @@ def bonus(rf, pindala, excel, count):
     help5 = "Tehislike jäätmaade/pruunalade asendamine rohealaga planeeringuala osad, mille puhul on haljasala kujundatud varasemast tööstusmaastikust, jääkreostuse likvideerimine (so sillutatud pinnad või reostunud pinnas vms). Siin real saab lisaboonuse selle eest, kui loodusliku ala kujundamine toimub keerulistes oludes, mis eeldab esmalt loodusliku elupaiga jaoks sobivate tingimuste loomist (so reostuse likvideerimine, ehitatud keskkonna lammutamine vms)."
     help6 = "Terviklike suurte haljasalade rajamine või alade kujundamine, mis aitavad tagada rohekoridoride sidusust (tehislike elementidega katkestamata ala, mis moodustab planeeringualast min 30%). Siin real saab lisaboonuse selle eest, kui märkimisväärne osa planeeringualast (30%) jäetakse terviklikult (so teede vms tehislike elementidega katkestamata kujul) looduslikuks."
 
-    numberfcol1 = st.number_input("**Taimkattega ala ehitiste peal. (m²)**", value=0, help=help1)
-    st.write(f"Põhifaktori koefitsent on 0.3 ja komponendi väärtus on {0.3 * numberfcol1:.1f}")
-    with numcol1:
-        numberfcol2 = st.number_input("**Haljasfassaadid ja -piirded (keskmine kõrgus) (m)**", value=0, help=help2)
-        st.write(f"Põhifaktori koefitsent on 0.4 ja komponendi väärtus on {0.4 * numberfcol2:.1f}")
-    with numcol2:
-        numberfcol3 = st.number_input("**Haljasfassaadid ja -piirded (laius) (m)**", value=0, help=help2)
-        st.write(f"Põhifaktori koefitsent on 0.4 ja komponendi väärtus on {0.4 * numberfcol3:.1f}")
-    numberfcol4 = st.number_input("**Haljasaladele rajatud sademevee kohtkäitlus: so maapinnalohud (m²)**", value=0, help=help3)
-    st.write(f"Põhifaktori koefitsent on 0.3 ja komponendi väärtus on {0.3 * numberfcol4:.1f}")
-    numberfcol5 = st.number_input("**Tehispindadele rajatud sademevee kohtkäitlus. (m²)**", value=0, help= help4)
-    st.write(f"Põhifaktori koefitsent on 0.3 ja komponendi väärtus on {0.3 * numberfcol5:.1f}")
-    numberfcol6 = st.number_input("**Tehislike jäätmaade/pruunalade asendamine rohealaga. (m²)**", value=0, help= help5)
-    st.write(f"Põhifaktori koefitsent on 0.3 ja komponendi väärtus on {0.3 * numberfcol6:.1f}")
-    numberfcol7 = st.number_input("**Terviklike suurte haljasalade rajamine või alade kujundamine. (m²)**", value=0, help=help6)
-    st.write(f"Põhifaktori koefitsent on 0.2 ja komponendi väärtus on {0.2 * numberfcol7:.1f}")
+
+    #with st.container(border=True):
+    #st.markdown(
+    #   f"<p style='font-size: 14px; font-weight: 400;'>"
+    #   f"Komponendi väärtus on {0 * numberfcol1:.1f}</p>",
+    #    unsafe_allow_html=True
+    #)
+
+
+    with st.container(border=True):
+        numberfcol1 = st.number_input("**Taimkattega ala ehitiste peal (m²), koefitsent on 0.3.**", value=0, help=help1)
+        st.markdown(
+            f"<p style='font-size: 14px; font-weight: 400;'>"
+            f"Komponendi väärtus on {0.3 * numberfcol1:.1f}</p>",
+                unsafe_allow_html=True
+            )
+    with st.container(border=True):
+        #with numcol1:
+        numberfcol2 = st.number_input("**Haljasfassaadid ja -piirded (keskmine kõrgus) (m), koefitsent on 0.4.**", value=0, help=help2)
+           #st.write(f"Põhifaktori koefitsent on 0.4 ja komponendi väärtus on {0.4 * numberfcol2:.1f}")
+        #with numcol2:
+        numberfcol3 = st.number_input("**Haljasfassaadid ja -piirded (laius) (m), koefitsent on 0.4.**", value=0, help=help2)
+            #st.write(f"Põhifaktori koefitsent on 0.4 ja komponendi väärtus on {0.4 * numberfcol3:.1f}")
+        st.markdown(
+            f"<p style='font-size: 14px; font-weight: 400;'>"
+            f"Komponendi väärtus on {numberfcol3 + 0.4 * numberfcol2:.1f}</p>",
+                unsafe_allow_html=True
+            )
+    with st.container(border=True):
+        numberfcol4 = st.number_input("**Haljasaladele rajatud sademevee kohtkäitlus: so maapinnalohud (m²), koefitsent on 0.3.**", value=0, help=help3)
+        st.markdown(
+            f"<p style='font-size: 14px; font-weight: 400;'>"
+            f"Komponendi väärtus on {0.3 * numberfcol4:.1f}</p>",
+                unsafe_allow_html=True
+            )
+    with st.container(border=True):
+        numberfcol5 = st.number_input("**Tehispindadele rajatud sademevee kohtkäitlus (m²), koefitsent on 0.3.**", value=0, help= help4)
+        st.markdown(
+            f"<p style='font-size: 14px; font-weight: 400;'>"
+            f"Komponendi väärtus on {0.3 * numberfcol5:.1f}</p>",
+                unsafe_allow_html=True
+            )
+    with st.container(border=True):
+        numberfcol6 = st.number_input("**Tehislike jäätmaade/pruunalade asendamine rohealaga (m²), koefitsent on 0.3.**", value=0, help= help5)
+        st.markdown(
+                f"<p style='font-size: 14px; font-weight: 400;'>"
+                f"Komponendi väärtus on {0.3 * numberfcol6:.1f}</p>",
+                    unsafe_allow_html=True
+                )
+    with st.container(border=True):
+        numberfcol7 = st.number_input("**Terviklike suurte haljasalade rajamine või alade kujundamine (m²), koefitsent on 0.2.**", value=0, help=help6)
+        st.markdown(
+                    f"<p style='font-size: 14px; font-weight: 400;'>"
+                    f"Komponendi väärtus on {0.2 * numberfcol7:.1f}</p>",
+                        unsafe_allow_html=True
+                    )
 
     excel.set_bon_haljas_korg(numberfcol2)
     excel.set_bon_haljas_lai(numberfcol3)
-
     excel.set_bon_taimkattega_ala(numberfcol1)
-
     excel.set_bon_sademevee_koht(numberfcol4)
     excel.set_bon_jäätmete(numberfcol6)
     excel.set_bon_sademevee_koht_tehis(numberfcol5)
@@ -88,13 +126,15 @@ def bonus(rf, pindala, excel, count):
 
     
     # 📌 DISPLAY CENTERED SUMMARY SECTION
-    st.markdown("<div class='summary-box'>Kavandatud maakasutuse ja planeeritud maakatte ökoloogilist kvaliteeti arvestav rohefaktor</div>", unsafe_allow_html=True)
-    if (result >= count):
-        st.markdown(f"<div class='result-box'>{result:.2f}</div>", unsafe_allow_html=True)
-    else:
-        st.markdown(f"<div class='result-box-red'>{result:.2f}</div>", unsafe_allow_html=True)
+    #st.markdown("<div class='summary-box'>Kavandatud maakasutuse ja planeeritud maakatte ökoloogilist kvaliteeti arvestav rohefaktor</div>", unsafe_allow_html=True)
+    #if (result >= count):
+    #    st.markdown(f"<div class='result-box'>{result:.2f}</div>", unsafe_allow_html=True)
+    #else:
+     #   st.markdown(f"<div class='result-box-red'>{result:.2f}</div>", unsafe_allow_html=True)
     
     
     #st.markdown(f"<div class='result-box'>{result:.2f}</div>", unsafe_allow_html=True)
 
-    return result, excel
+    summeeritud = numberfcol1 * 0.3 + numberfcol2 * 0.4 + numberfcol3 * 0.4 + numberfcol4 * 0.3 + numberfcol5 * 0.3 + numberfcol6 * 0.3 + numberfcol7 * 0.2
+
+    return result, excel, summeeritud

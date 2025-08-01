@@ -18,7 +18,7 @@ def create_selectbox(label, options, placeholder, key):
 
 
 # Define options for land use purposes
-land_use_options = {
+land_use_options = (
             "Avalikult kasutatavate- ja sotsiaalobjektide ala",
             "Eriotstarbeline ala",
             "Ettevõtlusala",
@@ -40,8 +40,7 @@ land_use_options = {
             "Tootmisala",
             "Veeala",
             "Väikeelamute ala",
-        }
-
+)
 
 def create_slider(label, min_value, max_value, default_value, key):
     """
@@ -112,10 +111,11 @@ def callVaartus(taotlusvaartus):
 
     
 
-    selected_maakasutus = create_selectbox(
+    selected_maakasutus = st.selectbox(
         label="**Maakasutuse tüüp.**",
         options=land_use_options,
-        placeholder="Valige juhtotstarve:",
+        placeholder="Valige maakasutuse tüüp",
+        index=None,
         key=f"selectbox_juht{taotlusvaartus.get_number()}",
     )
 
@@ -161,7 +161,7 @@ def callVaartus(taotlusvaartus):
 
     
 
-    st.markdown(f'''<h4 style="color: green;">ROHEFAKTORI TAOTLUSVÄÄTUS <b>{count}</b></h4>''', unsafe_allow_html=True)
+    #st.markdown(f'''<h4 style="color: green;">ROHEFAKTORI TAOTLUSVÄÄTUS <b>{count}</b></h4>''', unsafe_allow_html=True)
 
     return count
     #st.markdown("<div class='summary-box'>Planeeringulahendusega kavandatud maakattetüüpide rohefaktor</div>", unsafe_allow_html=True)
